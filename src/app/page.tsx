@@ -1,95 +1,92 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [weatherData, setWeatherData] = useState({
+    icon: "",
+    temp: "",
+    city: "",
+    country: "",
+  });
+  // const [lat, setLat] = useState<number>(22);
+  // const [lon, setLon] = useState<number>(88);
+
+  let apiKey = "18567484d2308f0f11d20970910838a3";
+  // let data = {};
+  async function fetchWeather(lat: any, lon: any) {
+    console.log(lat, lon);
+    await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+    )
+      .then((response) => {
+        console.log(response.ok);
+        if (!response.ok) {
+          alert("No weather found.");
+          throw new Error("No weather found.");
+        }
+        return response.json();
+      })
+      .then((data) => displayWeather(data));
+  }
+
+  function displayWeather(data: any) {
+    console.log("yaaaaaaaaaaaa");
+    console.log(data);
+
+    setWeatherData({
+      icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+      temp: data.main.temp,
+      city: data.name,
+      country: data.sys.country,
+    });
+  }
+
+  const getLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, console.error);
+      console.log("geolocation aquired");
+    } else {
+      console.log("geolocation not available");
+    }
+    console.log("getloc");
+  };
+  const showPosition = (position: any) => {
+    // setLat(position.coords.latitude);
+    // setLon(position.coords.longitude);
+    // console.log(lat, lon);
+    console.log("showloc");
+    fetchWeather(position.coords.latitude, position.coords.longitude);
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
+    <>
+      <div className="currentWeather">
+        <div className="icon">
+          {weatherData.icon && (
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
+              src={weatherData.icon}
+              alt="ico"
+              height={40}
+              width={40}
               priority
             />
-          </a>
+          )}
+        </div>
+        <div className="temp">{weatherData.temp}</div>
+        <div className="city">{weatherData.city}</div>
+        <div className="country">{weatherData.country}</div>
+      </div>
+      <div className="remoteWeather">
+        <div className="search">
+          <input type="text" placeholder="search" />
+          <button onClick={() => fetchWeather(22, 88)}>search</button>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </>
+  );
 }
