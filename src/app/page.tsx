@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 // import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Player, Controls } from "@lottiefiles/react-lottie-player";
+// import { Player, Controls } from "@lottiefiles/react-lottie-player";
 
 export default function Home() {
   const [locationInput, setLocationInput] = useState("");
@@ -37,6 +37,10 @@ export default function Home() {
   let openWeatherApiKey = "18567484d2308f0f11d20970910838a3";
   async function fetchWeather(lat: any, lon: any) {
     console.log(lat, lon);
+    if (lat === undefined && lon === undefined) {
+      alert("Invalid Location");
+      return null;
+    }
     await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${openWeatherApiKey}`
     )
@@ -54,7 +58,6 @@ export default function Home() {
   function displayWeather(data: any) {
     console.log("yaaaaaaaaaaaa");
     console.log(data);
-
     setWeatherData({
       icon: data.weather[0].icon,
       iconLink: `https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`,
@@ -71,6 +74,7 @@ export default function Home() {
       tempMax: data.main.temp_max.toPrecision(2),
       visibility: data.visibility,
       windSpeed: data.wind.speed,
+      bgQuery: data.weather[0].description.trim().replace(/ /g, "-"),
       // sunrise: {
       //   hour: new Date(data.sys.sunrise).getHours(),
       //   min: new Date(data.sys.sunrise).getMinutes(),
@@ -79,7 +83,6 @@ export default function Home() {
       //   hour: new Date(data.sys.sunset).getHours(),
       //   min: new Date(data.sys.sunset).getMinutes(),
       // },
-      bgQuery: data.weather[0].description.trim().replace(/ /g, "-"),
     });
   }
 
@@ -98,9 +101,6 @@ export default function Home() {
   };
   useEffect(() => {
     getLocation(); // setinterval for refreshing after 30min
-  }, []);
-
-  useEffect(() => {
     const createInterval = setInterval(() => {
       setTime({
         hour: new Date().getHours(),
@@ -117,6 +117,10 @@ export default function Home() {
   }, []);
   let openCageApiKey = "718be3bac33143749a5114aaa1d675cb";
   async function getLatLng() {
+    if (locationInput.trim() === "") {
+      alert("Enter a location fisrt.");
+      return null;
+    }
     const data = await fetch(
       `https://api.opencagedata.com/geocode/v1/json?q=${locationInput}&key=${openCageApiKey}`
     )
@@ -127,9 +131,15 @@ export default function Home() {
         }
         return response.json();
       })
-      .then((data) =>
-        fetchWeather(data.results[0].geometry.lat, data.results[0].geometry.lng)
-      );
+      .then((data) => {
+        console.log(data);
+        data.results[0]
+          ? fetchWeather(
+              data.results[0]?.geometry.lat,
+              data.results[0]?.geometry.lng
+            )
+          : alert("Location not valid");
+      });
     console.log(data);
   }
 
@@ -186,6 +196,9 @@ export default function Home() {
               <div className="location">
                 {weatherData.city}, {weatherData.country}
               </div>
+              <div className="feelsLike">
+                Feels like {weatherData.feelsLike}°C
+              </div>
               <div className="desc">
                 {/* {"("} */}
                 {weatherData.description}
@@ -213,24 +226,41 @@ export default function Home() {
                   advHandleClick ? { display: " none" } : { display: "flex" }
                 }
               >
-                <div className="feelsLike">{weatherData.feelsLike}°C</div>
-                <div className="pressure">{weatherData.pressure}mb</div>
-                <div className="humidity">{weatherData.humidity}%</div>
-                <div className="tempMin">{weatherData.tempMin}°C</div>
-                <div className="tempMax">{weatherData.tempMax}°C</div>
-                <div className="visibility">
-                  {weatherData.visibility < 1000
-                    ? weatherData.visibility + "m"
-                    : weatherData.visibility / 1000 + "km"}
+                <div className="adv tempMin">
+                  <span>minimum</span>
+                  <div>{weatherData.tempMin}°C</div>
                 </div>
-                <div className="windSpeed">{weatherData.windSpeed}m/s</div>
+                <div className="adv tempMax">
+                  <span>maximum</span>
+                  <div>{weatherData.tempMax}°C</div>
+                </div>
+                <div className="adv pressure">
+                  <span>pressure</span>
+                  <div>{weatherData.pressure}mb</div>
+                </div>
+                <div className="adv humidity">
+                  <span>humidity</span>
+                  <div>{weatherData.humidity}%</div>
+                </div>
+                <div className="adv visibility">
+                  <span>visibility</span>
+                  <div>
+                    {weatherData.visibility < 1000
+                      ? weatherData.visibility + "m"
+                      : weatherData.visibility / 1000 + "km"}
+                  </div>
+                </div>
+                <div className="adv windSpeed">
+                  <span>wind</span>
+                  <div>{weatherData.windSpeed}m/s</div>
+                </div>
                 {/* <div className="sunrise">
                   {weatherData.sunrise.hour}:{weatherData.sunrise.min}
                 </div>
                 <div className="sunset">
                   {weatherData.sunset.hour}:{weatherData.sunset.min}
                 </div> */}
-                <div>{weatherData.bgQuery}</div>
+                {/* <div>{weatherData.bgQuery}</div> */}
               </div>
             </>
           )}

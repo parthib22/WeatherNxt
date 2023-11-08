@@ -2,7 +2,7 @@
   transition: all 0.3s ease;
 }
 /* desktop */
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 920px) {
   body {
   }
   .currentWeather {
@@ -10,6 +10,10 @@
     width: 55vw;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
+  }
+  .currentWeatherChild {
+    height: 90vh;
+    width: 55vw;
   }
   .remoteWeather {
     height: 90vh;
@@ -19,7 +23,7 @@
   }
 }
 /* mobile */
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 920px) {
   body {
   }
   .currentWeather {
@@ -28,6 +32,8 @@
   }
   .currentWeatherChild {
     background: linear-gradient(transparent 75%, #111);
+    width: 100vw;
+    height: 100vh;
   }
   .remoteWeather {
     width: 100vw;
@@ -66,8 +72,8 @@ body::-webkit-scrollbar {
 .currentWeatherChild {
   /* background-color: #111; */
   backdrop-filter: brightness(0.5) /* blur(7px) */;
-  min-height: 100%;
-  min-width: 100%;
+  /* min-height: 100%;
+  min-width: 100%; */
   position: relative;
   display: flex;
   align-items: center;
@@ -80,6 +86,7 @@ body::-webkit-scrollbar {
   border-radius: 50%;
   /* background-color: #ccc; */
   margin: -50px;
+  margin-top: -100px;
 }
 .temp {
   font-size: 100px;
@@ -109,16 +116,23 @@ body::-webkit-scrollbar {
   font-size: 20px;
   font-weight: 500;
 }
+.feelsLike {
+  font-size: 14px;
+}
 .desc {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #ccc;
 }
 .advBtn {
+  font-family: inherit;
   margin-block: 20px;
   background: none;
-  color: #888;
+  color: #aaa;
   /* text-decoration: underline; */
   border: none;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -129,12 +143,39 @@ body::-webkit-scrollbar {
   margin-block: -5px;
 }
 .advanced {
+  margin-inline: 10vw;
+  /* background-color: #111111ee; */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  /* backdrop-filter: blur(50px); */
+}
+.adv {
+  font-size: 18px;
+  flex: 0.5;
+  backdrop-filter: blur(50px);
+  background-color: #111111aa;
+  /* border: 1px solid #ffffff33; */
+  min-width: 5rem;
+  padding-inline: 24px;
+  padding-block: 14px;
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 3px;
 }
-.feelsLike {
+.adv div {
+  /* backdrop-filter: blur(50px); */
+}
+.adv span {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 300;
+  /* backdrop-filter: blur(50px); */
 }
 .pressure {
 }
