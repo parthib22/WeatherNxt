@@ -8,6 +8,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 export default function Home() {
   const [locationInput, setLocationInput] = useState("");
+  // let locationInput = ""
   const [weatherData, setWeatherData] = useState<any>(null);
   const [time, setTime] = useState<any>(null);
   const [advHandleClick, setAdvHandleClick] = useState(true);
@@ -75,14 +76,14 @@ export default function Home() {
       visibility: data.visibility,
       windSpeed: data.wind.speed,
       bgQuery: data.weather[0].description.trim().replace(/ /g, "-"),
-      // sunrise: {
-      //   hour: new Date(data.sys.sunrise).getHours(),
-      //   min: new Date(data.sys.sunrise).getMinutes(),
-      // },
-      // sunset: {
-      //   hour: new Date(data.sys.sunset).getHours(),
-      //   min: new Date(data.sys.sunset).getMinutes(),
-      // },
+      sunrise: {
+        hour: new Date(new Date(0).setUTCSeconds(data.sys.sunrise)).getHours(),
+        min: new Date(new Date(0).setUTCSeconds(data.sys.sunrise)).getMinutes(),
+      },
+      sunset: {
+        hour: new Date(new Date(0).setUTCSeconds(data.sys.sunset)).getHours(),
+        min: new Date(new Date(0).setUTCSeconds(data.sys.sunset)).getMinutes(),
+      },
     });
   }
 
@@ -117,8 +118,8 @@ export default function Home() {
   }, []);
   let openCageApiKey = "718be3bac33143749a5114aaa1d675cb";
   async function getLatLng() {
-    if (locationInput.trim() === "") {
-      alert("Enter a location fisrt.");
+    if (!locationInput.trim()) {
+      alert("Enter a location first.");
       return null;
     }
     const data = await fetch(
@@ -223,7 +224,7 @@ export default function Home() {
               <div
                 className="advanced"
                 style={
-                  advHandleClick ? { display: " none" } : { display: "flex" }
+                  advHandleClick ? { display: "none" } : { display: "flex" }
                 }
               >
                 <div className="adv tempMin">
@@ -254,12 +255,18 @@ export default function Home() {
                   <span>wind</span>
                   <div>{weatherData.windSpeed}m/s</div>
                 </div>
-                {/* <div className="sunrise">
-                  {weatherData.sunrise.hour}:{weatherData.sunrise.min}
+                <div className="adv sunrise">
+                  <span>sunrise*</span>
+                  {weatherData.sunrise.hour < 10 && 0}
+                  {weatherData.sunrise.hour}:{weatherData.sunrise.min < 10 && 0}
+                  {weatherData.sunrise.min}
                 </div>
-                <div className="sunset">
-                  {weatherData.sunset.hour}:{weatherData.sunset.min}
-                </div> */}
+                <div className="adv sunset">
+                  <span>sunset*</span>
+                  {weatherData.sunset.hour < 10 && 0}
+                  {weatherData.sunset.hour}:{weatherData.sunset.min < 10 && 0}
+                  {weatherData.sunset.min}
+                </div>
                 {/* <div>{weatherData.bgQuery}</div> */}
               </div>
             </>
