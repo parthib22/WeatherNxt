@@ -84,6 +84,11 @@ export default function Home() {
         hour: new Date(new Date(0).setUTCSeconds(data.sys.sunset)).getHours(),
         min: new Date(new Date(0).setUTCSeconds(data.sys.sunset)).getMinutes(),
       },
+      // localTime: {
+      //   hour: new Date(new Date(0).setSeconds(data.dt)).getHours(),
+      //   min: new Date(new Date(0).setSeconds(data.dt)).getMinutes(),
+      //   sec: new Date(new Date(0).setSeconds(data.dt)).getSeconds(),
+      // },
     });
   }
 
@@ -267,6 +272,15 @@ export default function Home() {
                   {weatherData.sunset.hour}:{weatherData.sunset.min < 10 && 0}
                   {weatherData.sunset.min}
                 </div>
+                {/* <div className="adv localTime">
+                  <span>local time**</span>
+                  {weatherData.localTime.hour < 10 && 0}
+                  {weatherData.localTime.hour}:
+                  {weatherData.localTime.min < 10 && 0}
+                  {weatherData.localTime.min}:
+                  {weatherData.localTime.sec < 10 && 0}
+                  {weatherData.localTime.sec}
+                </div> */}
                 {/* <div>{weatherData.bgQuery}</div> */}
               </div>
             </>
@@ -301,6 +315,16 @@ export default function Home() {
             <SearchIcon />
           </button>
         </div>
+        <span
+          style={{
+            color: "#777",
+            fontSize: 12,
+            fontWeight: "400",
+            marginBlock: "7px 7px",
+          }}
+        >
+          *not set to local time
+        </span>
       </div>
     </>
   );

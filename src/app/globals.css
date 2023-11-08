@@ -37,7 +37,7 @@
   }
   .remoteWeather {
     width: 100vw;
-    height: 4rem;
+    height: 5rem;
   }
 }
 
@@ -211,7 +211,7 @@ body::-webkit-scrollbar {
 }
 .search {
   background-color: transparent;
-  position: absolute;
+  /* position: absolute; */
   top: 5%;
   width: 100%;
   margin-inline: 3%;
