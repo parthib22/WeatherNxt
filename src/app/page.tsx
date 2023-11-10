@@ -5,6 +5,9 @@ import SearchIcon from "@mui/icons-material/Search";
 // import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import { Player, Controls } from "@lottiefiles/react-lottie-player";
+import LinearProgress from "@mui/material/LinearProgress";
+import Box from "@mui/material/Box";
+import { NodeNextRequest } from "next/dist/server/base-http/node";
 
 export default function Home() {
   const [locationInput, setLocationInput] = useState("");
@@ -12,6 +15,7 @@ export default function Home() {
   const [weatherData, setWeatherData] = useState<any>(null);
   const [time, setTime] = useState<any>(null);
   const [advHandleClick, setAdvHandleClick] = useState(true);
+  const [progress, setProgress] = useState<boolean | null>(true);
   const week = [
     "Sunday",
     "Monday",
@@ -57,7 +61,7 @@ export default function Home() {
   }
 
   function displayWeather(data: any) {
-    console.log("yaaaaaaaaaaaa");
+    console.log("inside Display Weather");
     console.log(data);
     setWeatherData({
       icon: data.weather[0].icon,
@@ -90,14 +94,16 @@ export default function Home() {
       //   sec: new Date(new Date(0).setSeconds(data.dt)).getSeconds(),
       // },
     });
+    data && setProgress(false);
   }
 
   const getLocation = async () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition, console.error);
+      navigator.geolocation.getCurrentPosition(showPosition, (error) => {
+        alert(`Error: ${error.message}`);
+        setProgress(false);
+      });
       console.log("geolocation aquired");
-    } else {
-      console.log("geolocation not available");
     }
     console.log("getloc");
   };
@@ -108,14 +114,15 @@ export default function Home() {
   useEffect(() => {
     getLocation(); // setinterval for refreshing after 30min
     const createInterval = setInterval(() => {
+      const currentTime = new Date();
       setTime({
-        hour: new Date().getHours(),
-        min: new Date().getMinutes(),
-        sec: new Date().getSeconds(),
-        day: week[new Date().getDay()].substring(0, 3),
-        date: new Date().getDate(),
-        month: year[new Date().getMonth()].substring(0, 3),
-        year: new Date().getFullYear(),
+        hour: currentTime.getHours(),
+        min: currentTime.getMinutes(),
+        sec: currentTime.getSeconds(),
+        day: week[currentTime.getDay()].substring(0, 3),
+        date: currentTime.getDate(),
+        month: year[currentTime.getMonth()].substring(0, 3),
+        year: currentTime.getFullYear(),
       });
     });
 
@@ -123,10 +130,6 @@ export default function Home() {
   }, []);
   let openCageApiKey = "718be3bac33143749a5114aaa1d675cb";
   async function getLatLng() {
-    if (!locationInput.trim()) {
-      alert("Enter a location first.");
-      return null;
-    }
     const data = await fetch(
       `https://api.opencagedata.com/geocode/v1/json?q=${locationInput}&key=${openCageApiKey}`
     )
@@ -139,6 +142,7 @@ export default function Home() {
       })
       .then((data) => {
         console.log(data);
+        !data.results[0] && setProgress(false);
         data.results[0]
           ? fetchWeather(
               data.results[0]?.geometry.lat,
@@ -149,8 +153,30 @@ export default function Home() {
     console.log(data);
   }
 
+  const handleSubmit = () => {
+    if (!locationInput.trim()) {
+      setProgress(false);
+      alert("Enter a location first...");
+      return null;
+    }
+    getLatLng();
+    setProgress(true);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
   return (
     <>
+      {progress && (
+        <LinearProgress
+          style={{
+            width: "100%",
+            position: "fixed",
+            zIndex: 6,
+            top: 0,
+          }}
+          color="inherit"
+        />
+      )}
       <div
         className="currentWeather"
         style={
@@ -260,7 +286,7 @@ export default function Home() {
                   <span>wind</span>
                   <div>{weatherData.windSpeed}m/s</div>
                 </div>
-                <div className="adv sunrise">
+                {/* <div className="adv sunrise">
                   <span>sunrise*</span>
                   {weatherData.sunrise.hour < 10 && 0}
                   {weatherData.sunrise.hour}:{weatherData.sunrise.min < 10 && 0}
@@ -271,7 +297,7 @@ export default function Home() {
                   {weatherData.sunset.hour < 10 && 0}
                   {weatherData.sunset.hour}:{weatherData.sunset.min < 10 && 0}
                   {weatherData.sunset.min}
-                </div>
+                </div> */}
                 {/* <div className="adv localTime">
                   <span>local time**</span>
                   {weatherData.localTime.hour < 10 && 0}
@@ -304,27 +330,27 @@ export default function Home() {
         <div className="search">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search..."
             value={locationInput}
             onChange={(e) => setLocationInput(e.target.value)}
             onKeyDown={(e) => {
-              e.key === "Enter" && getLatLng();
+              e.key === "Enter" && handleSubmit();
             }}
           />
-          <button onClick={() => getLatLng()}>
+          <button onClick={() => handleSubmit()}>
             <SearchIcon />
           </button>
         </div>
-        <span
+        {/* <span
           style={{
             color: "#777",
-            fontSize: 12,
+            fontSize: 10,
             fontWeight: "400",
             marginBlock: "7px 7px",
           }}
         >
           *not set to local time
-        </span>
+        </span> */}
       </div>
     </>
   );

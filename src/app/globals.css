@@ -1,5 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 * {
   transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
 }
 /* desktop */
 @media only screen and (min-width: 920px) {
@@ -28,7 +31,7 @@
   }
   .currentWeather {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 5rem);
   }
   .currentWeatherChild {
     background: linear-gradient(transparent 75%, #111);
@@ -110,6 +113,7 @@ body::-webkit-scrollbar {
   color: #ccc;
 }
 .location {
+  font-family: inherit;
   position: absolute;
   top: 30px;
   right: 30px;
@@ -223,12 +227,35 @@ body::-webkit-scrollbar {
 .search input {
   width: calc(80% - 2.6rem);
   height: 2.5rem;
+  z-index: 2;
   border-radius: 50px;
   border: 0;
   background-color: #222;
   color: #fff;
   padding-inline: 15px;
 }
+.search input::placeholder {
+  font-family: inherit;
+  font-weight: 500;
+}
+/* .search input::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  min-height: 5px;
+  min-width: 5px;
+  background-color: red;
+  bottom: 0;
+}
+.search input::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  height: 5px;
+  width: 5px;
+  background-color: red;
+  top: 0;
+} */
 .search button {
   width: 2.7rem;
   height: 2.6rem;
@@ -240,7 +267,17 @@ body::-webkit-scrollbar {
   display: grid;
   place-items: center;
 }
+/* .search button::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  margin-right: 7.5%;
+  background-color: #333;
+  height: 1.5rem;
+  width: 3rem;
+} */
 .search button svg {
+  z-index: 2;
   fill: #aaa;
   scale: 0.8;
 }
