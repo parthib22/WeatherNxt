@@ -6,46 +6,108 @@
 }
 /* desktop */
 @media only screen and (min-width: 920px) {
-  body {
-  }
   .currentWeather {
     height: 90vh;
     width: 55vw;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
+    border-radius: 25px;
+    /* border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px; */
   }
   .currentWeatherChild {
     height: 90vh;
     width: 55vw;
   }
-  .remoteWeather {
+  .currentWeatherAmbient {
+    height: 90vh;
+    width: 55vw;
+    border-radius: 25px;
+    position: absolute;
+    z-index: -1;
+    filter: blur(100px);
+  }
+  /* .moreWeather {
     height: 90vh;
     width: 35vw;
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
+  } */
+
+  .advanced {
+    width: 500px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media only screen and (min-width: 500px) {
+  .search {
+    position: absolute;
+    bottom: 3.5%;
+    right: 0;
+    background-color: #11111110;
+    max-width: 300px;
+    margin-inline: 3%;
+    justify-content: space-between;
+    border-radius: 50px;
+    border: 2px solid #aaa;
+  }
+  .search input {
+    width: calc(75%);
+    border: 0;
+    outline: 0;
+  }
+  .search button {
+    background-color: #ffffff90;
   }
 }
 /* mobile */
 @media only screen and (max-width: 920px) {
-  body {
-  }
   .currentWeather {
     width: 100vw;
-    height: calc(100vh - 5rem);
+    height: calc(100vh);
   }
   .currentWeatherChild {
     background: linear-gradient(transparent 75%, #111);
     width: 100vw;
     height: 100vh;
   }
-  .remoteWeather {
+  .currentWeatherAmbient {
+    display: none;
+  }
+  /* .moreWeather {
     width: 100vw;
     height: 5rem;
+  } */
+  .advanced {
+    max-width: 500px;
+    width: calc(100%-40px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .search {
+    background-color: #111;
+    width: 100vw;
+    padding: 10px;
+    justify-content: center;
+    gap: 5px;
+  }
+  .search input {
+    width: 100%;
+    border: 2px solid #aaa;
+    margin: 20px;
+  }
+  .search button {
+    background-color: transparent;
+    border: 2px solid #ccc;
+    color: #eee;
+    position: absolute;
+    right: 30px;
   }
 }
 
 body {
-  background-color: #222;
+  background: linear-gradient(45deg, #ddd, #ccc);
   box-sizing: border-box;
   height: 100vh;
   width: 100vw;
@@ -147,12 +209,11 @@ body::-webkit-scrollbar {
   margin-block: -5px;
 }
 .advanced {
-  margin-inline: 5vw;
   /* background-color: #111111ee; */
-  display: flex;
+
   flex-wrap: wrap;
-  align-items: center;
   justify-content: center;
+
   gap: 10px;
   /* backdrop-filter: blur(50px); */
 }
@@ -172,16 +233,13 @@ body::-webkit-scrollbar {
   flex-direction: column;
   gap: 3px;
 }
-.adv div {
-  /* backdrop-filter: blur(50px); */
-}
 .adv span {
   font-size: 12px;
   color: #aaa;
   font-weight: 300;
   /* backdrop-filter: blur(50px); */
 }
-.pressure {
+/* .pressure {
 }
 .humidity {
 }
@@ -192,7 +250,7 @@ body::-webkit-scrollbar {
 .visibility {
 }
 .windSpeed {
-}
+} */
 .time {
   position: absolute;
   bottom: 30px;
@@ -204,37 +262,27 @@ body::-webkit-scrollbar {
 .time .line2 {
   font-size: 12px;
 }
-.remoteWeather {
-  /* background-color: #111; */
-  backdrop-filter: brightness(0.5) /* blur(7px) */;
+/* .moreWeather {
+  backdrop-filter: brightness(0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* box-shadow: 0 0 5px #333; */
-}
+} */
 .search {
-  background-color: transparent;
-  /* position: absolute; */
-  top: 5%;
-  width: 100%;
-  margin-inline: 3%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5px;
 }
 .search input {
-  width: calc(80% - 2.6rem);
   height: 2.5rem;
   z-index: 2;
   border-radius: 50px;
-  border: 0;
-  background-color: #222;
+  background-color: transparent;
   color: #fff;
   padding-inline: 15px;
 }
 .search input::placeholder {
+  color: #999;
   font-family: inherit;
   font-weight: 500;
 }
@@ -257,15 +305,15 @@ body::-webkit-scrollbar {
   top: 0;
 } */
 .search button {
-  width: 2.7rem;
-  height: 2.6rem;
+  width: 2.8rem;
+  height: 2.7rem;
   border-radius: 50%;
   border: 0;
   /* border: 1px solid #555; */
-  background-color: #222;
   cursor: pointer;
   display: grid;
   place-items: center;
+  /* border-left: 2px solid #ccc; */
 }
 /* .search button::after {
   content: "";
@@ -278,6 +326,6 @@ body::-webkit-scrollbar {
 } */
 .search button svg {
   z-index: 2;
-  fill: #aaa;
+  fill: currentColor;
   scale: 0.8;
 }

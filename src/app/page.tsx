@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 // import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import { Player, Controls } from "@lottiefiles/react-lottie-player";
-import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { NodeNextRequest } from "next/dist/server/base-http/node";
 
@@ -16,6 +16,8 @@ export default function Home() {
   const [time, setTime] = useState<any>(null);
   const [advHandleClick, setAdvHandleClick] = useState(true);
   const [progress, setProgress] = useState<boolean | null>(true);
+  // const [showAmbience, setShowAmbience] = useState<boolean>(true);
+
   const week = [
     "Sunday",
     "Monday",
@@ -128,6 +130,15 @@ export default function Home() {
 
     return () => clearInterval(createInterval);
   }, []);
+
+  // useEffect(() => {
+  //   const delayTimeout = setTimeout(() => {
+  //     setShowAmbience(true);
+  //   }, 1000);
+
+  //   return () => clearTimeout(delayTimeout);
+  // }, []);
+
   let openCageApiKey = "718be3bac33143749a5114aaa1d675cb";
   async function getLatLng() {
     const data = await fetch(
@@ -166,17 +177,6 @@ export default function Home() {
 
   return (
     <>
-      {progress && (
-        <LinearProgress
-          style={{
-            width: "100%",
-            position: "fixed",
-            zIndex: 6,
-            top: 0,
-          }}
-          color="inherit"
-        />
-      )}
       <div
         className="currentWeather"
         style={
@@ -188,7 +188,16 @@ export default function Home() {
         }
       >
         <div className="currentWeatherChild">
-          {weatherData && (
+          {progress && (
+            <CircularProgress
+              style={{
+                color: "#fff",
+                scale: 2,
+              }}
+              color="inherit"
+            />
+          )}
+          {weatherData && !progress && (
             <>
               <div
                 className="icon"
@@ -325,8 +334,6 @@ export default function Home() {
             </div>
           )}
         </div>
-      </div>
-      <div className="remoteWeather">
         <div className="search">
           <input
             type="text"
@@ -341,7 +348,9 @@ export default function Home() {
             <SearchIcon />
           </button>
         </div>
-        {/* <span
+      </div>
+      {/* <div className="moreWeather"> */}
+      {/* <span
           style={{
             color: "#777",
             fontSize: 10,
@@ -351,7 +360,17 @@ export default function Home() {
         >
           *not set to local time
         </span> */}
-      </div>
+      {/* </div> */}
+      <div
+        className="currentWeatherAmbient"
+        style={
+          weatherData && {
+            backgroundImage: `url(https://source.unsplash.com/800x600?${weatherData.bgQuery})`,
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }
+        }
+      />
     </>
   );
 }
