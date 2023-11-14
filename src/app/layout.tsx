@@ -25,7 +25,7 @@ export default function RootLayout({
           content="Live weather updates from location and around the world"
         />
         <meta property="og:image" content="/cloudy-256x256.png" />
-        <meta property="og:url" content="https://durgapedia.online/" />
+        <meta property="og:url" content="https://weathernxt.vercel.app/" />
         <meta
           property="og:site_name"
           content="WeatherNxt: Live weather updates from location and around the world"
