@@ -2,12 +2,9 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-// import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import { Player, Controls } from "@lottiefiles/react-lottie-player";
 import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
-import { NodeNextRequest } from "next/dist/server/base-http/node";
 
 export default function Home() {
   const [locationInput, setLocationInput] = useState("");
@@ -247,6 +244,8 @@ export default function Home() {
               </div>
               <button
                 className="advBtn"
+                aria-label="advanced button"
+                aria-labelledby="advanced button"
                 onClick={() => setAdvHandleClick(!advHandleClick)}
                 style={
                   advHandleClick
